@@ -6,6 +6,7 @@ import os
 
 import pymysql.cursors
 from bcrypt import hashpw, gensalt
+import ctypes  # An included library with Python install.
 
 # Connect to the database.
 connection = pymysql.connect(host='localhost',
@@ -38,8 +39,8 @@ def login():
         #print(password)
 
         hashed = hashpw(password.encode('utf8'), gensalt())
-        #print(hashed)
-        query = "select count(*) from users where username = '" + str(username) + "' and password = '" + hashed + "'"
+        print(hashed)
+        query = "select * from users where username = '" + str(username) + "' and password = '" + hashed.decode('utf-8') + "'"
         cursor.execute(query)
         #print(cursor._last_executed)
         data = cursor.fetchall()
@@ -59,13 +60,23 @@ def register1():
 @application.route('/SignUp', methods=['GET', 'POST'])
 def SignUp():
     if request.method=='POST':
+        connection = pymysql.connect(host='localhost',
+                                     user='root',
+                                     password='root',
+                                     db='spshare',
+                                     charset='utf8mb4',
+                                     cursorclass=pymysql.cursors.DictCursor)
+
+        cursor = connection.cursor()
         name = request.form['name']
         username = request.form['username']
         password = request.form['password']
         hashed = hashpw(password.encode('utf8'), gensalt())
-        query = "select into users(name, username, password) values(%s, %s, %s)"
-        cursor.execute(query, (str(name), str(username), hashed))
-
+        query = "insert into users(name, username, password) values(%s, %s, %s)"
+        cursor.execute(query, (name, username, hashed))
+        connection.commit()
+        ctypes.windll.user32.MessageBoxW(0, "Success", "You have been registered, now Log in", 1)
+        return render_template('index.html')
 
 
 if __name__ == '__main__':
