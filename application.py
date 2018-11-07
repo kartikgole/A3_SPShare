@@ -1,3 +1,5 @@
+import binascii
+
 from flask import Flask, render_template, request, session
 #import mysql.connector
 import hashlib
@@ -31,26 +33,31 @@ def index():
 
 @application.route('/login', methods=['GET', 'POST'])
 def login():
-    #return render_template('homepage.html')
+
     if request.method=='POST':
         username = request.form['username']
         password = request.form['password']
-        #print(username)
-        #print(password)
 
-        hashed = hashpw(password.encode('utf8'), gensalt())
-        print(hashed)
-        query = "select * from users where username = '" + str(username) + "' and password = '" + hashed.decode('utf-8') + "'"
+
+        encpass = password.encode('ASCII')
+        dk = hashlib.pbkdf2_hmac('SHA256', encpass, b'salt', 100000).strip()
+        print(dk)
+        newhashed = str(binascii.hexlify(dk))
+
+        finalhashed = newhashed[1:]
+        print(finalhashed)
+        query = "select * from users where username = '" + str(username) + "' and password =  " + finalhashed +" "
+        print(query)
         cursor.execute(query)
-        #print(cursor._last_executed)
+
         data = cursor.fetchall()
         print(data)
         if data:
             session['user'] = username
             print (session['user'])
-            return render_template('homepage.html')
+            return render_template('SPShareHome.html')
         else:
-            return render_template('index.html')
+            return render_template('LoginFailed.html')
 
 @application.route('/register', methods=['GET', 'POST'])
 def register1():
@@ -71,9 +78,14 @@ def SignUp():
         name = request.form['name']
         username = request.form['username']
         password = request.form['password']
-        hashed = hashpw(password.encode('utf8'), gensalt())
+        encpass = password.encode('ASCII')
+        dk = hashlib.pbkdf2_hmac('SHA256', encpass, b'salt', 100000).strip()
+        print(dk)
+        newhashed = binascii.hexlify(dk)
+        print(newhashed)
         query = "insert into users(name, username, password) values(%s, %s, %s)"
-        cursor.execute(query, (name, username, hashed))
+        print(query, (name, username, newhashed))
+        cursor.execute(query, (name, username, newhashed))
         connection.commit()
         ctypes.windll.user32.MessageBoxW(0, "Success", "You have been registered, now Log in", 1)
         return render_template('index.html')
