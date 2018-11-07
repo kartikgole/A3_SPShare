@@ -90,6 +90,16 @@ def SignUp():
         ctypes.windll.user32.MessageBoxW(0, "Success", "You have been registered, now Log in", 1)
         return render_template('index.html')
 
+@application.route('/loginfail1', methods=['GET', 'POST'])
+def loginfail1():
+    if request.method=='POST':
+        return render_template('index.html')
+
+@application.route('/loginfail2', methods=['GET', 'POST'])
+def loginfail2():
+    if request.method=='POST':
+        return render_template('register.html')
+
 
 if __name__ == '__main__':
     application.run()
