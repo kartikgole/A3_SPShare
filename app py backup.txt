@@ -1,0 +1,54 @@
+from flask import Flask, render_template, request, session
+#import mysql.connector
+import hashlib
+
+import os
+
+import pymysql.cursors
+
+# Connect to the database.
+connection = pymysql.connect(host='localhost',
+                             user='root',
+                             password='root',
+                             db='spshare',
+                             charset='utf8mb4',
+                             cursorclass=pymysql.cursors.DictCursor)
+
+if connection.open:
+    print("connection successful bro LMAO..")
+else:
+    print("failed")
+cursor = connection.cursor()
+
+application = Flask(__name__)
+application.secret_key = os.urandom(24)
+
+@application.route('/')
+def hello_world():
+    return render_template('index.html')
+
+@application.route('/login', methods=['GET', 'POST'])
+def login():
+    #return render_template('homepage.html')
+    if request.method=='GET':
+        username = request.form['username']
+        password = request.form['password']
+        print(username)
+        print(password)
+        dk = hashlib.pbkdf2_hmac('SHA256', password, b'salt', 100000).encode('base64').strip()
+        print(len(dk))
+        query = "select count(*) from users where username = '" + str(username) + "' and password = '" + dk + "'"
+        cursor.execute(query)
+        print(cursor._last_executed)
+        data = cursor.fetchall()
+        print(data)
+        if data[0][0]!=0:
+            session['user'] = username
+            print (session['user'])
+            return render_template('homepage.html')
+        else:
+            return render_template('index.html')
+
+
+if __name__ == '__main__':
+    application.run()

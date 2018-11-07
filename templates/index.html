@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" href="./css/style.css" >
+	<title>SPShare Login</title>
+</head>
+<body>
+	<div style="width: auto; margin-top: 100px;">
+		<center>
+			<h1 style="font-size: 4em; font-weight: bold; margin-top: 50px; font-style: italic;">SPShare</h1>
+			<p style="margin-left: 350px; margin-top: -30px; font-style: italic;">Sharing made easy</p>
+		</center>
+		<center>
+		<form action="/login" method="post" enctype="multipart/form-data">
+			<table>
+				<tr>
+					<td>
+						Username
+					</td>
+					<td>
+						<input type="text" name="username" placeholder="enter ">
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Password
+					</td>
+					<td>
+						<input type="password" name="password" placeholder="password">
+					</td>
+				</tr>
+			</table>
+			<button style="margin-top: 20px; width: auto;" type="submit">Login</button>
+        </form>
+            <br><br>
+
+            <form action="/register" method="post" enctype="multipart/form-data">
+
+            <table>
+                <tr>
+                    <td>
+                        Not registered? Register here
+                    </td>
+                </tr>
+            </table>
+            <button style="margin-top: 20px; width: auto;" type="submit">Register</button>
+            </form>
+            <br><br>
+            <form action="/view user" method="post" enctype="multipart/form-data">
+
+            <table>
+                <tr>
+                    <td>
+                        View Users here
+                    </td>
+                </tr>
+            </table>
+            <button style="margin-top: 20px; width: auto;" type="submit">View Users</button>
+            </form>
+            <br><br>
+			<a href="forgotpassword.html">Forgot Password</a>
+
+		</center>
+	</div>
+</body>
+</html>

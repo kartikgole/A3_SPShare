@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Sign Up Page</title>
+</head>
+<body>
+
+<h1>Enter your details. Do not worry, Data is secured using bcrypt!</h1>
+<form action="/SignUp" method="post" enctype="multipart/form-data">
+			<table>
+				<tr>
+					<td>
+						Full name
+					</td>
+					<td>
+						<input type="text" name="name" placeholder="enter your name">
+					</td>
+				</tr>
+                <tr>
+					<td>
+						Username
+					</td>
+					<td>
+						<input type="text" name="username" placeholder="enter unique username">
+					</td>
+				</tr>
+				<tr>
+					<td>
+						Password
+					</td>
+					<td>
+						<input type="password" name="password" placeholder="password">
+					</td>
+				</tr>
+			</table>
+			<button style="margin-top: 20px; width: auto;" type="submit">Sign Up!</button>
+        </form>
+
+
+</body>
+</html>
