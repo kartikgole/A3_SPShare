@@ -87,7 +87,7 @@ def SignUp():
         print(query, (name, username, newhashed))
         cursor.execute(query, (name, username, newhashed))
         connection.commit()
-        ctypes.windll.user32.MessageBoxW(0, "Success", "You have been registered, now Log in", 1)
+        #ctypes.windll.user32.MessageBoxW(0, "Success", "You have been registered, now Log in", 1)
         return render_template('index.html')
 
 @application.route('/loginfail1', methods=['GET', 'POST'])
